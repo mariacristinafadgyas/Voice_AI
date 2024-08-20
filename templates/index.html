@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Ask me something!</h1>
+    <h1>Ask me something...!</h1>
     <div id="bubbleAnimation">
         <div class="bubble"></div>
         <div class="bubble"></div>
@@ -19,46 +19,16 @@
     </div>
     <form id="speakForm">
         <input type="text" id="sentence" name="sentence" placeholder="Type something..." required>
-        <button type="submit">Speak</button>
+        <label><input type="radio" name="inputMode" value="text" checked> Text</label>
+        <label><input type="radio" name="inputMode" value="voice"> Voice</label>
+        <br>
+        <button type="submit">Ask me something...</button>
     </form>
     <audio id="audio"></audio>
-    <p class="instructions">Type a sentence above and click "Speak" to hear it.</p>
+    <p class="instructions">Select ‘Text’ or ‘Voice’ and click on ‘Ask me something...’ to hear the answer.</p><br><br>
 
-    <script>
-        const form = document.getElementById('speakForm');
-        const audio = document.getElementById('audio');
-        const bubbleAnimation = document.getElementById('bubbleAnimation');
+     <p id="listeningMessage" style="display: none;">Listening...</p>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const sentence = document.getElementById('sentence').value;
-
-            const formData = new FormData();
-            formData.append('sentence', sentence);
-            document.getElementById('sentence').value = '';
-
-            const response = await fetch('/speak', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const blob = await response.blob();
-                const audioUrl = URL.createObjectURL(blob);
-                audio.src = audioUrl;
-
-                // Start animation and play audio
-                bubbleAnimation.classList.add('active');
-                audio.play();
-
-                // Stop animation when the audio ends
-                audio.onended = () => {
-                    bubbleAnimation.classList.remove('active');
-                };
-            } else {
-                alert('Something went wrong. Please try again.');
-            }
-        });
-    </script>
+    <script src="/static/main_ro.js"></script>
 </body>
 </html>

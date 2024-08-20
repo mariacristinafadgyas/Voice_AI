@@ -4,6 +4,7 @@ from io import BytesIO
 import requests
 import os
 from dotenv import load_dotenv
+from transform_voice import transform_voice_to_text
 
 load_dotenv()
 key = os.getenv('key')
@@ -22,7 +23,7 @@ def text_to_audio_file(text):
 def ask_question(content):
     url = "https://chatgpt-42.p.rapidapi.com/conversationgpt4-2"
 
-    question_content = f"{content}" + ('. Please answer back to me in a silly way.'
+    question_content = f"{content}" + ('? Please answer back to me in a silly way.'
                                        ' And please be as short as possible and as'
                                        ' funny as possible')
     payload = {
@@ -58,10 +59,16 @@ def index():
 def speak():
     sentence = request.form.get('sentence')
     print(sentence)
+    input_mode = request.form.get('inputMode')
+    print(input_mode)
 
-    if not sentence:
-        return {"error": "Please provide a sentence"}, 400
-    if sentence:
+    if input_mode == 'voice':
+        oral_sentence = transform_voice_to_text()
+        answer = ask_question(oral_sentence)
+        print(answer)
+    else:
+        if not sentence:
+            return {"error": "Please provide a sentence"}, 400
         answer = ask_question(sentence)
         print(answer)
 
